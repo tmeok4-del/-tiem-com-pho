@@ -1,0 +1,128 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Tiệm Cơm & Phở Việt</title>
+<style>
+:root{--red:#c9382b;--dark:#2b211c;--cream:#fff7e7;--gold:#f3bd45;--green:#5f9d56;--line:#ead9bc}
+*{box-sizing:border-box}body{margin:0;background:#efe6d5;color:var(--dark);font-family:system-ui,-apple-system,Segoe UI,sans-serif}
+button{font:inherit;cursor:pointer;border:0}#game{max-width:1100px;margin:auto;min-height:100vh;background:#fffaf1}
+.top{background:linear-gradient(135deg,#b52e23,#db5138);color:#fff;padding:12px 16px;position:sticky;top:0;z-index:20}
+.brand{display:flex;align-items:center;justify-content:space-between;gap:10px}.brand h1{font-size:20px;margin:0}.wallet{background:#7e2119;padding:8px 11px;border-radius:12px;font-weight:800}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:7px;margin-top:10px}.stat{background:#ffffff18;border:1px solid #ffffff30;border-radius:10px;padding:7px}.stat small{display:block;opacity:.8;font-size:11px}.stat b{font-size:14px}
+.layout{display:grid;grid-template-columns:190px 1fr;min-height:calc(100vh - 110px)}
+aside{background:#3a2b24;color:white;padding:12px 9px}.nav{display:grid;gap:6px;position:sticky;top:115px}.nav button{background:transparent;color:#f7e9d0;text-align:left;padding:11px;border-radius:10px;font-weight:700}.nav button.active,.nav button:hover{background:#b52e23;color:#fff}
+main{padding:14px 14px 80px}.pagehead{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}.pagehead h2{margin:0;font-size:21px}.sub{color:#75665b;font-size:13px}
+.card{background:white;border:1px solid var(--line);border-radius:15px;padding:12px;box-shadow:0 4px 15px #5d3a1710;margin-bottom:12px}.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:9px}.food{background:#fff8ea;border:2px solid #ecd7b4;border-radius:13px;padding:10px;text-align:left}.food.sel{border-color:var(--red);background:#fff0e9}.food .emoji{font-size:32px}.food b{display:block}.price{color:#a72d21;font-weight:800}.muted{color:#796e64}
+.customer{display:flex;gap:12px;align-items:center;background:#fff0cf;border-radius:13px;padding:12px}.face{font-size:40px}.orderline{padding:8px 0;border-bottom:1px dashed #e3d3b9}.orderline:last-child{border:0}.tag{display:inline-block;background:#f5e1b6;border-radius:8px;padding:4px 7px;margin:3px 3px 0 0;font-size:12px}
+.btn{padding:10px 13px;border-radius:10px;font-weight:800}.primary{background:var(--red);color:#fff}.gold{background:var(--gold)}.soft{background:#eadbc3}.green{background:var(--green);color:#fff}.danger{background:#6e332c;color:#fff}.row{display:flex;gap:7px;flex-wrap:wrap}.right{margin-left:auto}
+.steps{display:grid;gap:8px}.step{border:2px dashed #dcc6a0;border-radius:12px;padding:11px}.step.done{border-style:solid;background:#edf6e8;border-color:#9ac38f}.progress{height:11px;background:#eee1cc;border-radius:20px;overflow:hidden}.bar{height:100%;width:0;background:var(--green);transition:.2s}
+.kitchen-grid{display:grid;grid-template-columns:1.1fr .9fr;gap:12px}.ingredient{display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid #f0e4d2}.ingredient:last-child{border:0}
+.table{width:100%;border-collapse:collapse;font-size:13px}.table th,.table td{padding:8px;border-bottom:1px solid #eee0c9;text-align:left}
+.bigstat{font-size:28px;font-weight:900}.meter{height:10px;background:#eadfce;border-radius:20px;overflow:hidden}.meter>i{display:block;height:100%;background:var(--red)}
+.bottom{display:none}.toast{position:fixed;bottom:18px;left:50%;transform:translateX(-50%);background:#29211d;color:white;padding:10px 15px;border-radius:12px;z-index:99;display:none;max-width:90%;text-align:center}
+.modal{position:fixed;inset:0;background:#0008;display:none;align-items:center;justify-content:center;padding:18px;z-index:80}.modalbox{background:#fffaf0;border-radius:17px;padding:16px;max-width:560px;width:100%;max-height:85vh;overflow:auto}
+@media(max-width:700px){.layout{display:block}aside{display:none}.bottom{display:grid;position:fixed;bottom:0;left:0;right:0;max-width:1100px;margin:auto;grid-template-columns:repeat(5,1fr);background:#382a23;padding:5px;z-index:30}.bottom button{background:transparent;color:#f8ead4;font-size:10px;padding:6px 2px}.bottom button.active{background:#b52e23;border-radius:8px}.grid{grid-template-columns:repeat(2,1fr)}.kitchen-grid{grid-template-columns:1fr}.stats{grid-template-columns:repeat(4,1fr)}main{padding:11px 10px 80px}.stat b{font-size:12px}}
+</style>
+</head>
+<body>
+<div id="game">
+<header class="top"><div class="brand"><h1>🍚 Tiệm Cơm & Phở Việt</h1><div class="wallet">💰 <span id="money">0</span>đ</div></div>
+<div class="stats"><div class="stat"><small>Ngày</small><b id="day">1</b></div><div class="stat"><small>Khách</small><b id="served">0</b></div><div class="stat"><small>⭐ Uy tín</small><b id="rep">100</b></div><div class="stat"><small>🏆 Cấp</small><b id="level">1</b></div></div></header>
+<div class="layout"><aside><nav class="nav" id="nav"></nav></aside><main id="main"></main></div>
+<nav class="bottom" id="bottom"></nav>
+</div><div class="toast" id="toast"></div><div class="modal" id="modal"></div>
+<script>
+const FOODS=[
+{id:'cd',n:'Cơm rang dưa bò',e:'🍳',p:45000,t:'Cơm',d:'Cơm rang giòn, dưa cải và bò xào'},
+{id:'ctc',n:'Cơm rang thập cẩm',e:'🍳',p:52000,t:'Cơm',d:'Trứng, thịt, xúc xích và rau củ'},
+{id:'cc',n:'Cơm tự chọn',e:'🍚',p:28000,t:'Cơm',d:'Chọn topping theo ý khách'},
+{id:'pb',n:'Phở bò',e:'🍜',p:50000,t:'Phở',d:'Nước dùng bò thơm ngọt'},
+{id:'pg',n:'Phở gà',e:'🍜',p:48000,t:'Phở',d:'Nước dùng gà thanh nhẹ'},
+{id:'ptc',n:'Phở tái chín',e:'🥩',p:60000,t:'Phở',d:'Bò tái và bò chín'},
+{id:'pdb',n:'Phở đặc biệt',e:'🍜',p:72000,t:'Phở',d:'Đầy đủ topping thịt bò'}
+];
+const TOPS=[
+['bo','🥩 Bò tái',15000],['bochin','🥩 Bò chín',16000],['gau','🥩 Gầu bò',18000],['gan','🥩 Gân bò',15000],
+['ga','🍗 Thịt gà',12000],['trung','🥚 Trứng',8000],['xuc','🌭 Xúc xích',10000],['lap','🥓 Lạp xưởng',12000],
+['cha','🍥 Chả',10000],['vien','⚪ Viên bò',10000],['dua','🥬 Dưa cải',5000],['rau','🌿 Rau thêm',3000],
+['hanh','🧅 Hành phi',3000],['kim','🥬 Kimchi',6000]
+].map(x=>({id:x[0],n:x[1],p:x[2]}));
+const defaultState={money:180000,day:1,served:0,rep:100,level:1,exp:0,tab:'serve',order:null,inventory:{rice:30,beef:25,chicken:20,egg:25,noodle:30,veg:40},upgrades:{speed:0,quality:0,capacity:0},staff:0,ordersToday:0,daily:0,ranking:0};
+let S=JSON.parse(localStorage.getItem('compho-full')||'null')||structuredClone(defaultState);
+
+function save(){localStorage.setItem('compho-full',JSON.stringify(S))}
+function fmt(n){return Math.round(n).toLocaleString('vi-VN')}
+function toast(x){let e=document.getElementById('toast');e.textContent=x;e.style.display='block';clearTimeout(window.tm);window.tm=setTimeout(()=>e.style.display='none',1800)}
+function navItems(){return [['serve','👨‍🍳 Phục vụ'],['menu','📖 Thực đơn'],['stock','📦 Kho hàng'],['staff','🧑‍🍳 Nhân viên'],['shop','🏪 Nâng cấp'],['rank','🏆 Thành tích']]}
+function setTab(t){S.tab=t;render()}
+function levelUp(){let need=S.level*100;if(S.exp>=need){S.exp-=need;S.level++;S.money+=30000;toast('🎉 Lên cấp '+S.level+'! +30.000đ')}}
+function makeOrder(){
+ let f=FOODS[Math.floor(Math.random()*FOODS.length)], n=f.id==='cc'?1+Math.floor(Math.random()*4):Math.floor(Math.random()*3);
+ let pool=TOPS.filter(x=>f.t==='Phở'?['bo','bochin','gau','gan','ga','trung','vien','rau','hanh'].includes(x.id):true);
+ let tops=[];while(tops.length<n){let x=pool[Math.floor(Math.random()*pool.length)];if(!tops.find(a=>a.id===x.id))tops.push(x)}
+ S.order={food:f,tops,customer:['🧑','👩','👨','👵','👴','🧑‍🎓'][Math.floor(Math.random()*6)],time:100};
+}
+function render(){
+ document.getElementById('money').textContent=fmt(S.money);document.getElementById('day').textContent=S.day;document.getElementById('served').textContent=S.served;document.getElementById('rep').textContent=S.rep;document.getElementById('level').textContent=S.level;
+ const nav=document.getElementById('nav'), bot=document.getElementById('bottom');
+ nav.innerHTML=navItems().map(x=>`<button class="${S.tab===x[0]?'active':''}" onclick="setTab('${x[0]}')">${x[1]}</button>`).join('');
+ bot.innerHTML=navItems().slice(0,5).map(x=>`<button class="${S.tab===x[0]?'active':''}" onclick="setTab('${x[0]}')">${x[1]}</button>`).join('');
+ if(S.tab==='serve')serve();if(S.tab==='menu')menu();if(S.tab==='stock')stock();if(S.tab==='staff')staff();if(S.tab==='shop')shop();if(S.tab==='rank')rank();
+ save()
+}
+function serve(){
+ if(!S.order)makeOrder();let o=S.order,f=o.food;
+ document.getElementById('main').innerHTML=`<div class="pagehead"><div><h2>👨‍🍳 Khu phục vụ</h2><div class="sub">Nhận đơn, chế biến và giao món cho khách.</div></div><button class="soft btn" onclick="makeOrder();render()">🔄 Đổi khách</button></div>
+ <div class="kitchen-grid"><div>
+ <div class="card customer"><div class="face">${o.customer}</div><div><b>Khách đang chờ</b><br>“Cho mình <b>${f.n}</b> nhé!”</div></div>
+ <div class="card"><b>🧾 Chi tiết đơn #${S.served+1}</b><div class="orderline">${f.e} ${f.n} <span class="right price">${fmt(f.p)}đ</span></div>
+ ${o.tops.map(t=>`<div class="orderline">➕ ${t.n}<span class="right price">+${fmt(t.p)}đ</span></div>`).join('')}</div></div>
+ <div class="card"><b>🔥 Bếp</b><div class="steps" style="margin-top:9px"><div class="step" id="st1">1️⃣ Chuẩn bị nguyên liệu</div><div class="step" id="st2">2️⃣ Nấu / rang / trụng</div><div class="step" id="st3">3️⃣ Hoàn thiện & giao món</div></div>
+ <div class="progress" style="margin:10px 0"><div class="bar" id="bar"></div></div><div class="row"><button class="btn primary" id="cook" onclick="cook()">👨‍🍳 Bắt đầu</button><button class="btn gold" onclick="fastCook()">⚡ Làm nhanh</button></div></div></div>
+ <div class="card"><b>📈 Kinh nghiệm</b><div class="meter"><i style="width:${Math.min(100,S.exp/(S.level*100)*100)}%"></i></div><small>${S.exp}/${S.level*100} EXP</small></div>`;
+}
+let cooking=0;
+function updateCook(){for(let i=1;i<=3;i++)document.getElementById('st'+i)?.classList.toggle('done',i<=cooking);document.getElementById('bar').style.width=(cooking/3*100)+'%';}
+function cook(){if(cooking<3){cooking++;updateCook();document.getElementById('cook').textContent=cooking===3?'💵 Giao món':'🍳 Đang chế biến…';if(cooking===3)toast('Món đã hoàn thiện!')}else deliver()}
+function fastCook(){cooking=3;updateCook();document.getElementById('cook').textContent='💵 Giao món';toast('⚡ Bếp đã hoàn thiện món!')}
+function deliver(){
+ let o=S.order,val=o.food.p+o.tops.reduce((a,b)=>a+b.p,0)+S.upgrades.quality*3000;
+ if(S.staff)val+=2000*S.staff;S.money+=val;S.served++;S.ordersToday++;S.exp+=30;S.rep=Math.min(100,S.rep+1);S.daily++;
+ if(S.ordersToday>=8){S.day++;S.ordersToday=0;S.daily=0;S.money+=20000;toast('🌞 Sang ngày mới! Thưởng 20.000đ')}
+ if(S.rep>=100&&S.served%10===0)S.money+=10000;
+ levelUp();S.order=null;cooking=0;render();toast('✅ Giao món! +'+fmt(val)+'đ')
+}
+function menu(){
+ document.getElementById('main').innerHTML=`<div class="pagehead"><div><h2>📖 Thực đơn</h2><div class="sub">Menu quán và hệ thống cơm/phở tự chọn.</div></div></div>
+ <div class="card"><h3>🍚 Cơm</h3><div class="grid">${FOODS.filter(f=>f.t==='Cơm').map(foodCard).join('')}</div></div>
+ <div class="card"><h3>🍜 Phở</h3><div class="grid">${FOODS.filter(f=>f.t==='Phở').map(foodCard).join('')}</div></div>
+ <div class="card"><h3>➕ Topping</h3><div class="grid">${TOPS.map(t=>`<div class="food"><b>${t.n}</b><span class="price">+${fmt(t.p)}đ</span></div>`).join('')}</div></div>`
+}
+function foodCard(f){return `<div class="food"><div class="emoji">${f.e}</div><b>${f.n}</b><small class="muted">${f.d}</small><div class="price">${fmt(f.p)}đ</div></div>`}
+function stock(){
+ const inv=[['🍚','Gạo','rice'],['🥩','Thịt bò','beef'],['🍗','Thịt gà','chicken'],['🥚','Trứng','egg'],['🍜','Bánh phở','noodle'],['🥬','Rau & gia vị','veg']];
+ document.getElementById('main').innerHTML=`<div class="pagehead"><div><h2>📦 Kho hàng</h2><div class="sub">Nhập nguyên liệu để quán không bị thiếu hàng.</div></div></div><div class="card">${inv.map(x=>`<div class="ingredient"><div>${x[0]} <b>${x[1]}</b><br><small class="muted">Đang có: ${S.inventory[x[2]]}</small></div><button class="btn primary" onclick="buyStock('${x[2]}')">Nhập 10 — ${x[2]==='beef'? '35.000':'20.000'}đ</button></div>`).join('')}</div>
+ <div class="card"><b>💡 Mẹo quản lý</b><p class="muted">Giữ kho ổn định để phục vụ nhiều khách hơn. Nâng cấp sức chứa sẽ giúp bạn tích trữ nhiều nguyên liệu.</p></div>`
+}
+function buyStock(k){let c=k==='beef'?35000:20000;if(S.money<c)return toast('❌ Không đủ tiền');S.money-=c;S.inventory[k]+=10;toast('📦 Đã nhập hàng');render()}
+function staff(){
+ document.getElementById('main').innerHTML=`<div class="pagehead"><div><h2>🧑‍🍳 Nhân viên</h2><div class="sub">Thuê người hỗ trợ phục vụ và tăng doanh thu.</div></div></div><div class="card"><div class="bigstat">👨‍🍳 ${S.staff}</div><p class="muted">Mỗi nhân viên cộng 2.000đ vào mỗi đơn đã giao.</p><button class="btn primary" onclick="hire()">Thuê nhân viên — 80.000đ</button></div><div class="card"><h3>Ca làm</h3><table class="table"><tr><th>Nhân viên</th><th>Trạng thái</th><th>Thưởng/đơn</th></tr><tr><td>Đội bếp & phục vụ</td><td><span class="tag">Đang hoạt động</span></td><td>+${fmt(S.staff*2000)}đ</td></tr></table></div>`
+}
+function hire(){if(S.money<80000)return toast('❌ Chưa đủ tiền');S.money-=80000;S.staff++;toast('🎉 Đã thuê nhân viên');render()}
+function shop(){
+ const upgrades=[['speed','⚡ Bếp nhanh','Giảm thời gian thao tác',60000],['quality','⭐ Công thức ngon','Mỗi đơn +3.000đ',90000],['capacity','📦 Kho lớn','Tăng sức chứa nguyên liệu',70000]];
+ document.getElementById('main').innerHTML=`<div class="pagehead"><div><h2>🏪 Nâng cấp quán</h2><div class="sub">Đầu tư để quán phục vụ nhanh và kiếm nhiều hơn.</div></div></div><div class="card">${upgrades.map(x=>`<div class="ingredient"><div><b>${x[0]==='speed'?'⚡':x[0]==='quality'?'⭐':'📦'} ${x[1]}</b><br><small class="muted">${x[2]} · Cấp ${S.upgrades[x[0]]}</small></div><button class="btn gold" onclick="upgrade('${x[0]}',${x[3]})">${fmt(x[3])}đ</button></div>`).join('')}</div><div class="card"><h3>🏠 Trang trí</h3><p class="muted">Mở khóa thêm bàn ghế, bảng hiệu và khu bếp ở các cấp cao hơn.</p><button class="btn soft" onclick="toast('🔒 Tính năng mở rộng sẽ mở ở cấp 5')">Xem khu vực mới</button></div>`
+}
+function upgrade(k,c){if(S.money<c)return toast('❌ Chưa đủ tiền');S.money-=c;S.upgrades[k]++;toast('✨ Nâng cấp thành công');render()}
+function rank(){
+ let score=S.served*100+S.money/1000+S.level*500;
+ document.getElementById('main').innerHTML=`<div class="pagehead"><div><h2>🏆 Thành tích</h2><div class="sub">Theo dõi tiến trình của tiệm.</div></div></div>
+ <div class="grid"><div class="card"><small>Doanh thu hiện tại</small><div class="bigstat">${fmt(S.money)}đ</div></div><div class="card"><small>Đơn đã phục vụ</small><div class="bigstat">${S.served}</div></div></div>
+ <div class="card"><h3>🥇 Bảng xếp hạng mùa</h3><table class="table"><tr><th>#</th><th>Tiệm</th><th>Điểm</th></tr><tr><td>1</td><td>Phở Gánh Phố Cổ</td><td>12.480</td></tr><tr><td>2</td><td>Cơm Nhà Việt</td><td>10.920</td></tr><tr><td>3</td><td>Tiệm Cơm & Phở Việt</td><td>${Math.floor(score).toLocaleString('vi-VN')}</td></tr></table></div>
+ <div class="card"><h3>🎯 Nhiệm vụ hôm nay</h3><p>Phục vụ 8 khách: <b>${Math.min(8,S.ordersToday)}/8</b></p><div class="meter"><i style="width:${Math.min(100,S.ordersToday/8*100)}%"></i></div><p>Phần thưởng: <b>20.000đ</b> + EXP</p></div>`
+}
+render();
+</script>
+</body></html>
